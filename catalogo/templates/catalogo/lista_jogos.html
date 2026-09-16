@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Meu Catálogo de Jogos</title>
+</head>
+<body>
+
+    <h1>Meu Catálogo de Jogos</h1>
+
+    {% for jogo in jogos %}
+        <h2>{{ jogo.nome }}</h2>
+
+        <p><strong>Descrição:</strong> {{ jogo.descricao }}</p>
+        <p><strong>Gênero:</strong> {{ jogo.genero }}</p>
+        <p><strong>Status:</strong> {{ jogo.status }}</p>
+        <p><strong>Nota:</strong> {{ jogo.nota }}/5</p>
+
+        <a href="{% url 'excluir_jogo' jogo.id %}">
+            <button>Excluir</button>
+        </a>
+
+        <hr>
+    {% empty %}
+        <p>Nenhum jogo cadastrado.</p>
+    {% endfor %}
+
+</body>
+</html>
