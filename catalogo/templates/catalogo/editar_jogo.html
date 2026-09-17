@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Adicionar Jogo</title>
+    <title>Editar Jogo</title>
 
     <style>
         body {
@@ -37,43 +37,50 @@
             padding: 10px 20px;
             cursor: pointer;
         }
+
+        a {
+            display: inline-block;
+            margin-top: 15px;
+        }
     </style>
 </head>
 
 <body>
 
-    <h1>Adicionar Jogo</h1>
+    <h1>Editar Jogo</h1>
 
     <form method="POST">
         {% csrf_token %}
 
         <label>Nome:</label>
-        <input type="text" name="nome">
+        <input type="text" name="nome" value="{{ jogo.nome }}">
 
         <br><br>
 
         <label>Descrição:</label>
-        <textarea name="descricao"></textarea>
+        <textarea name="descricao">{{ jogo.descricao }}</textarea>
 
         <br><br>
 
         <label>Gênero:</label>
-        <input type="text" name="genero">
+        <input type="text" name="genero" value="{{ jogo.genero }}">
 
         <br><br>
 
         <label>Status:</label>
-        <input type="text" name="status">
+        <input type="text" name="status" value="{{ jogo.status }}">
 
         <br><br>
 
         <label>Nota:</label>
-        <input type="number" name="nota" min="0" max="10">
+        <input type="number" name="nota" min="0" max="10" value="{{ jogo.nota }}">
 
         <br><br>
 
-        <button type="submit">Adicionar Jogo</button>
+        <button type="submit">Salvar alterações</button>
     </form>
+
+    <a href="{% url 'lista_jogos' %}">Voltar para o catálogo</a>
 
 </body>
 </html>

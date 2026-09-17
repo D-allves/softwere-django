@@ -8,13 +8,23 @@
 
     <h1>Meu Catálogo de Jogos</h1>
 
+    <a href="{% url 'adicionar_jogo' %}">
+        <button>Adicionar Jogo</button>
+    </a>
+
+    <hr>
+
     {% for jogo in jogos %}
         <h2>{{ jogo.nome }}</h2>
 
         <p><strong>Descrição:</strong> {{ jogo.descricao }}</p>
         <p><strong>Gênero:</strong> {{ jogo.genero }}</p>
         <p><strong>Status:</strong> {{ jogo.status }}</p>
-        <p><strong>Nota:</strong> {{ jogo.nota }}/5</p>
+        <p><strong>Nota:</strong> {{ jogo.nota }}/10</p>
+
+        <a href="{% url 'editar_jogo' jogo.id %}">
+            <button>Editar</button>
+        </a>
 
         <a href="{% url 'excluir_jogo' jogo.id %}">
             <button>Excluir</button>

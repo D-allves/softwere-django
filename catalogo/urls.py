@@ -5,4 +5,5 @@ urlpatterns = [
     path('', views.lista_jogos, name='lista_jogos'),
     path('adicionar/', views.adicionar_jogo, name='adicionar_jogo'),
     path('excluir/<int:id>/', views.excluir_jogo, name='excluir_jogo'),
+    path('editar/<int:id>/', views.editar_jogo, name='editar_jogo'),
 ]

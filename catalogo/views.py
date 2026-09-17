@@ -33,3 +33,19 @@ def excluir_jogo(request, id):
     jogo.delete()
 
     return redirect('lista_jogos')
+
+def editar_jogo(request, id):
+    jogo = Jogo.objects.get(id=id)
+
+    if request.method == 'POST':
+        jogo.nome = request.POST['nome']
+        jogo.descricao = request.POST['descricao']
+        jogo.genero = request.POST['genero']
+        jogo.status = request.POST['status']
+        jogo.nota = request.POST['nota']
+
+        jogo.save()
+
+        return redirect('lista_jogos')
+
+    return render(request, 'catalogo/editar_jogo.html', {'jogo': jogo})
