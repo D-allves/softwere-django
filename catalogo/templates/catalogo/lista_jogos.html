@@ -1,39 +1,323 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meu Catálogo de Jogos</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            background: #111827;
+            color: #f9fafb;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+
+        .subtitulo {
+            text-align: center;
+            color: #9ca3af;
+            margin-bottom: 30px;
+        }
+
+        .resumo {
+            background: #1f2937;
+            padding: 18px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 25px;
+            border: 1px solid #374151;
+        }
+
+        .pesquisa,
+        .filtro {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .pesquisa input,
+        .filtro select {
+            flex: 1;
+            padding: 13px;
+            border: 1px solid #374151;
+            border-radius: 9px;
+            background: #1f2937;
+            color: #fff;
+            outline: none;
+        }
+
+        .pesquisa input:focus,
+        .filtro select:focus {
+            border-color: #6366f1;
+        }
+
+        button,
+        .botao {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 9px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .pesquisa button,
+        .filtro button {
+            background: #6366f1;
+            color: white;
+        }
+
+        .pesquisa button:hover,
+        .filtro button:hover {
+            background: #4f46e5;
+        }
+
+        .limpar {
+            display: inline-block;
+            margin: 5px 0 20px;
+            color: #a5b4fc;
+            text-decoration: none;
+        }
+
+        .limpar:hover {
+            text-decoration: underline;
+        }
+
+        .adicionar {
+            display: block;
+            width: 200px;
+            margin: 10px auto 30px;
+            padding: 13px;
+            text-align: center;
+            background: #22c55e;
+            color: white;
+            text-decoration: none;
+            border-radius: 9px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .adicionar:hover {
+            background: #16a34a;
+            transform: translateY(-2px);
+        }
+
+        .jogo {
+            background: #1f2937;
+            padding: 22px;
+            margin-bottom: 18px;
+            border-radius: 14px;
+            border: 1px solid #374151;
+            transition: 0.2s;
+        }
+
+        .jogo:hover {
+            border-color: #6366f1;
+            transform: translateY(-2px);
+        }
+
+        .jogo h2 {
+            margin-top: 0;
+            color: #a5b4fc;
+        }
+
+        .jogo p {
+            color: #d1d5db;
+            line-height: 1.5;
+        }
+
+        .botoes {
+            margin-top: 18px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .editar {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .editar:hover {
+            background: #d97706;
+        }
+
+        .excluir {
+            background: #ef4444;
+            color: white;
+        }
+
+        .excluir:hover {
+            background: #dc2626;
+        }
+
+        .vazio {
+            text-align: center;
+            color: #9ca3af;
+            padding: 30px;
+        }
+
+        @media (max-width: 600px) {
+            .pesquisa,
+            .filtro {
+                flex-direction: column;
+            }
+
+            .botoes {
+                flex-direction: column;
+            }
+
+            .botoes a,
+            .botoes button {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-    <h1>Meu Catálogo de Jogos</h1>
+    <h1>🎮 Meu Catálogo de Jogos</h1>
 
-    <a href="{% url 'adicionar_jogo' %}">
-        <button>Adicionar Jogo</button>
+    <p class="subtitulo">
+        Organize, pesquise e acompanhe seus jogos favoritos.
+    </p>
+
+    <div class="resumo">
+        📚 Total de jogos: <strong>{{ total_jogos }}</strong>
+
+        {% if media %}
+            &nbsp; | &nbsp;
+            ⭐ Média das notas: <strong>{{ media }}/10</strong>
+        {% endif %}
+    </div>
+
+    <form class="pesquisa" method="GET">
+
+        <input
+            type="text"
+            name="busca"
+            placeholder="🔎 Pesquisar jogo..."
+            value="{{ busca }}"
+        >
+
+        <button type="submit">Pesquisar</button>
+
+    </form>
+
+    <form class="filtro" method="GET">
+
+        <select name="status">
+
+            <option value="">Todos os status</option>
+
+            <option value="Já joguei" {% if status == "Já joguei" %}selected{% endif %}>
+                Já joguei
+            </option>
+
+            <option value="Quero jogar" {% if status == "Quero jogar" %}selected{% endif %}>
+                Quero jogar
+            </option>
+
+        </select>
+
+        <select name="ordem">
+
+            <option value="">Ordenar por nota</option>
+
+            <option value="maior" {% if ordem == "maior" %}selected{% endif %}>
+                Maior nota
+            </option>
+
+            <option value="menor" {% if ordem == "menor" %}selected{% endif %}>
+                Menor nota
+            </option>
+
+        </select>
+
+        <button type="submit">Aplicar</button>
+
+    </form>
+
+    <a class="limpar" href="{% url 'lista_jogos' %}">
+        🔄 Limpar filtros
     </a>
 
-    <hr>
+    <a class="adicionar" href="{% url 'adicionar_jogo' %}">
+        ➕ Adicionar Jogo
+    </a>
 
     {% for jogo in jogos %}
-        <h2>{{ jogo.nome }}</h2>
 
-        <p><strong>Descrição:</strong> {{ jogo.descricao }}</p>
-        <p><strong>Gênero:</strong> {{ jogo.genero }}</p>
-        <p><strong>Status:</strong> {{ jogo.status }}</p>
-        <p><strong>Nota:</strong> {{ jogo.nota }}/10</p>
+        <div class="jogo">
 
-        <a href="{% url 'editar_jogo' jogo.id %}">
-            <button>Editar</button>
-        </a>
+            <h2>🎮 {{ jogo.nome }}</h2>
 
-        <a href="{% url 'excluir_jogo' jogo.id %}">
-            <button>Excluir</button>
-        </a>
+            <p>
+                <strong>Descrição:</strong>
+                {{ jogo.descricao }}
+            </p>
 
-        <hr>
+            <p>
+                <strong>Gênero:</strong>
+                {{ jogo.genero }}
+            </p>
+
+            <p>
+                <strong>Status:</strong>
+                {{ jogo.status }}
+            </p>
+
+            <p>
+                <strong>Nota:</strong>
+                {{ jogo.nota }}/10 ⭐
+            </p>
+
+            <div class="botoes">
+
+                <a href="{% url 'editar_jogo' jogo.id %}">
+                    <button class="editar">✏️ Editar</button>
+                </a>
+
+                <a
+                    href="{% url 'excluir_jogo' jogo.id %}"
+                    onclick="return confirm('Tem certeza que deseja excluir este jogo?');"
+                >
+                    <button class="excluir">🗑️ Excluir</button>
+                </a>
+
+            </div>
+
+        </div>
+
     {% empty %}
-        <p>Nenhum jogo cadastrado.</p>
+
+        <div class="vazio">
+
+            {% if busca %}
+                Nenhum jogo encontrado para "{{ busca }}".
+            {% else %}
+                Nenhum jogo encontrado.
+            {% endif %}
+
+        </div>
+
     {% endfor %}
 
 </body>
 </html>
+```
