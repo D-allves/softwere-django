@@ -1,31 +1,61 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Jogo</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
             max-width: 700px;
-            margin: 40px auto;
-            padding: 20px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            background: #111827;
+            color: #f9fafb;
+        }
+
+        .container {
+            background: #1f2937;
+            padding: 30px;
+            border-radius: 14px;
+            border: 1px solid #374151;
         }
 
         h1 {
+            text-align: center;
+            margin-top: 0;
             margin-bottom: 30px;
         }
 
         label {
+            display: block;
             font-weight: bold;
+            margin-bottom: 7px;
         }
 
         input,
-        textarea {
+        textarea,
+        select {
             width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            box-sizing: border-box;
+            padding: 13px;
+            margin-bottom: 20px;
+            border: 1px solid #374151;
+            border-radius: 9px;
+            background: #111827;
+            color: #fff;
+            outline: none;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #6366f1;
         }
 
         textarea {
@@ -34,53 +64,136 @@
         }
 
         button {
-            padding: 10px 20px;
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 9px;
+            background: #6366f1;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
             cursor: pointer;
+            transition: 0.2s;
         }
 
-        a {
-            display: inline-block;
-            margin-top: 15px;
+        button:hover {
+            background: #4f46e5;
+            transform: translateY(-2px);
+        }
+
+        .voltar {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #a5b4fc;
+            text-decoration: none;
+        }
+
+        .voltar:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 
 <body>
 
-    <h1>Editar Jogo</h1>
+    <div class="container">
 
-    <form method="POST">
-        {% csrf_token %}
+        <h1>✏️ Editar Jogo</h1>
 
-        <label>Nome:</label>
-        <input type="text" name="nome" value="{{ jogo.nome }}">
+        <form method="POST">
+            {% csrf_token %}
 
-        <br><br>
+            <label>Nome:</label>
+            <input
+                type="text"
+                name="nome"
+                value="{{ jogo.nome }}"
+                required
+            >
 
-        <label>Descrição:</label>
-        <textarea name="descricao">{{ jogo.descricao }}</textarea>
+            <label>Descrição:</label>
+            <textarea name="descricao" required>{{ jogo.descricao }}</textarea>
 
-        <br><br>
+            <label>Gênero:</label>
 
-        <label>Gênero:</label>
-        <input type="text" name="genero" value="{{ jogo.genero }}">
+            <select name="genero" required>
+                <option value="">Selecione um gênero</option>
 
-        <br><br>
+                <option value="Ação" {% if jogo.genero == "Ação" %}selected{% endif %}>
+                    Ação
+                </option>
 
-        <label>Status:</label>
-        <input type="text" name="status" value="{{ jogo.status }}">
+                <option value="Aventura" {% if jogo.genero == "Aventura" %}selected{% endif %}>
+                    Aventura
+                </option>
 
-        <br><br>
+                <option value="RPG" {% if jogo.genero == "RPG" %}selected{% endif %}>
+                    RPG
+                </option>
 
-        <label>Nota:</label>
-        <input type="number" name="nota" min="0" max="10" value="{{ jogo.nota }}">
+                <option value="FPS" {% if jogo.genero == "FPS" %}selected{% endif %}>
+                    FPS
+                </option>
 
-        <br><br>
+                <option value="MOBA" {% if jogo.genero == "MOBA" %}selected{% endif %}>
+                    MOBA
+                </option>
 
-        <button type="submit">Salvar alterações</button>
-    </form>
+                <option value="Sandbox" {% if jogo.genero == "Sandbox" %}selected{% endif %}>
+                    Sandbox
+                </option>
 
-    <a href="{% url 'lista_jogos' %}">Voltar para o catálogo</a>
+                <option value="Esporte" {% if jogo.genero == "Esporte" %}selected{% endif %}>
+                    Esporte
+                </option>
+
+                <option value="Terror" {% if jogo.genero == "Terror" %}selected{% endif %}>
+                    Terror
+                </option>
+
+                <option value="Outro" {% if jogo.genero == "Outro" %}selected{% endif %}>
+                    Outro
+                </option>
+            </select>
+
+            <label>Status:</label>
+
+            <select name="status" required>
+                <option value="">Selecione o status</option>
+
+                <option value="Já joguei" {% if jogo.status == "Já joguei" %}selected{% endif %}>
+                    Já joguei
+                </option>
+
+                <option value="Quero jogar" {% if jogo.status == "Quero jogar" %}selected{% endif %}>
+                    Quero jogar
+                </option>
+            </select>
+
+            <label>Nota:</label>
+
+            <input
+                type="number"
+                name="nota"
+                min="0"
+                max="10"
+                value="{{ jogo.nota }}"
+                required
+            >
+
+            <button type="submit">
+                💾 Salvar alterações
+            </button>
+
+        </form>
+
+        <a class="voltar" href="{% url 'lista_jogos' %}">
+            ← Voltar para o catálogo
+        </a>
+
+    </div>
 
 </body>
 </html>
+```
