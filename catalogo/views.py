@@ -1,8 +1,11 @@
-from django.shortcuts import render, redirect
-from .models import Jogo
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.db.models import Avg
+from .models import Jogo
 
 
+@login_required
 def lista_jogos(request):
     busca = request.GET.get('busca', '')
     status = request.GET.get('status', '')
@@ -37,36 +40,34 @@ def lista_jogos(request):
     })
 
 
+@login_required
 def adicionar_jogo(request):
     if request.method == 'POST':
-        nome = request.POST['nome']
-        descricao = request.POST['descricao']
-        genero = request.POST['genero']
-        status = request.POST['status']
-        nota = request.POST['nota']
-
         Jogo.objects.create(
-            nome=nome,
-            descricao=descricao,
-            genero=genero,
-            status=status,
-            nota=nota
+            nome=request.POST['nome'],
+            descricao=request.POST['descricao'],
+            genero=request.POST['genero'],
+            status=request.POST['status'],
+            nota=request.POST['nota']
         )
-
         return redirect('lista_jogos')
 
     return render(request, 'catalogo/adicionar_jogo.html')
 
 
+@login_required
 def excluir_jogo(request, id):
-    jogo = Jogo.objects.get(id=id)
-    jogo.delete()
+    jogo = get_object_or_404(Jogo, id=id)
+
+    if request.method == 'POST':
+        jogo.delete()
 
     return redirect('lista_jogos')
 
 
+@login_required
 def editar_jogo(request, id):
-    jogo = Jogo.objects.get(id=id)
+    jogo = get_object_or_404(Jogo, id=id)
 
     if request.method == 'POST':
         jogo.nome = request.POST['nome']
@@ -74,9 +75,10 @@ def editar_jogo(request, id):
         jogo.genero = request.POST['genero']
         jogo.status = request.POST['status']
         jogo.nota = request.POST['nota']
-
         jogo.save()
 
         return redirect('lista_jogos')
 
-    return render(request, 'catalogo/editar_jogo.html', {'jogo': jogo})
+    return render(request, 'catalogo/editar_jogo.html', {
+        'jogo': jogo
+    })
